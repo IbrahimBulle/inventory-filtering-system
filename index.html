@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Items</title>
+</head>
+<body>
+    <div class="container">
+        <div class="input">
+            <h2>Search Item</h2>
+            <input type="text" id="search" placeholder="Type item name...">
+            <button id="clear-btn" style="display:none;">Clear</button> <!-- Clear Button -->
+            <div id="results"></div>
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById("search");
+        const results = document.getElementById("results");
+        const clearBtn = document.getElementById("clear-btn");
+
+        let items = [];  // This will hold the list of items to search through
+
+        // Fetch all items from the server (or use a local list)
+        fetch('inventory.json') // Ensure this path is correct, it should point to the inventory.json file
+            .then(res => res.json())
+            .then(data => {
+                items = Object.values(data); // Convert JSON object to an array
+                console.log(items); // Check if items data is loaded correctly
+            })
+            .catch(err => console.error('Error fetching inventory:', err));
+
+        // Debounce function to delay the request
+        function debounce(func, delay) {
+            let timeoutId;
+            return function (...args) {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => {
+                    func.apply(this, args);
+                }, delay);
+            };
+        }
+
+        // Handle input event for searching/filtering
+        const filterItems = debounce(() => {
+            const query = input.value.trim().toLowerCase();
+
+            if (query.length === 0) {
+                results.innerHTML = "";
+                clearBtn.style.display = 'none';  // Hide the clear button
+                return;
+            }
+
+            // Filter items based on query
+            const filteredItems = items.filter(item =>
+                item.name.toLowerCase().includes(query) // Matching based on item name
+            );
+
+            // Display results
+            if (filteredItems.length > 0) {
+                results.innerHTML = filteredItems.map(item => {
+                    return `
+                        <div class="match-item" onclick="showStandardCost('${item.code}')">
+                            <p class="item-name">${highlightMatch(item.name, query)}</p>
+                            <div class="item-prices">
+                                <span class="standard-cost" style="display:none;">Standard Cost: KES ${item.standard_cost}</span>
+                                <span class="selling-price">Selling Price: KES ${item.selling_price}</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                clearBtn.style.display = 'inline';  // Show the clear button
+            } else {
+                results.innerHTML = "<p>No items found.</p>";
+                clearBtn.style.display = 'none';  // Hide the clear button if no results
+            }
+        }, 300);  // 300ms debounce delay
+
+        input.addEventListener("input", filterItems);
+
+        // Function to highlight matching part of the text
+        function highlightMatch(text, query) {
+            const index = text.toLowerCase().indexOf(query.toLowerCase());
+            if (index === -1) return text; // No match found
+            return text.slice(0, index) + '<span class="highlight">' + text.slice(index, index + query.length) + '</span>' + text.slice(index + query.length);
+        }
+
+        // Show standard cost on item click
+        function showStandardCost(code) {
+            const itemElement = document.querySelector(`[onclick="showStandardCost('${code}')"]`);
+            const standardCostElement = itemElement.querySelector('.standard-cost');
+            if (standardCostElement) {
+                standardCostElement.style.display = 'block';
+                setTimeout(() => {
+                    standardCostElement.style.display = 'none';
+                }, 3000); // Hide after 3 seconds
+            }
+        }
+
+        // Clear the search input and results
+        clearBtn.addEventListener("click", () => {
+            input.value = '';
+            results.innerHTML = '';
+            clearBtn.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

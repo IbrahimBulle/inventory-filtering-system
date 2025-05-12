@@ -1,0 +1,158 @@
+/* General Body Styling */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fa;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+.input {
+    width: 80%; /* Take full width of .container */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+/* Container for content */
+.container {
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+/* Heading */
+h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Search Input Field */
+#search {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    outline: none;
+    transition: border 0.3s;
+}
+
+#search:focus {
+    border-color: #3498db;
+}
+
+/* Clear Button */
+#clear-btn {
+    padding: 8px 16px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-block;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+#clear-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Container for the search results */
+#results {
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Match Item Styling */
+.match-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    color: #333;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    width: 100%;  /* Ensure it takes full width of the container */
+}
+
+.match-item:hover {
+    background-color: #f0f8ff;
+}
+
+.match-item .item-name {
+    font-weight: bold;
+    color: #3498db;
+}
+
+.item-code, .item-prices {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.item-prices span {
+    margin-right: 10px;
+}
+
+.item-prices .standard-cost {
+    display: none;
+    color: #e67e22;
+    font-weight: bold;
+}
+
+/* Highlighting the matched text */
+.highlight {
+    background-color: #f39c12;
+    color: white;
+    padding: 2px 4px;
+    border-radius: 3px;
+}
+
+/* No Results Found */
+.no-results {
+    color: #e74c3c;
+    font-weight: bold;
+    text-align: center;
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+        width: 90%;
+    }
+
+    #search {
+        width: 100%;
+    }
+
+    #results {
+        max-width: 100%;
+    }
+
+    .match-item {
+        padding: 15px;
+    }
+}
